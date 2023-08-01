@@ -13,11 +13,10 @@ public class Machine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NonNull
+    @NotEmpty
     private String name;
-    @NonNull
+    @NotEmpty
     private String location;
-    @NonNull
     private int user;
 
     public Machine() {
@@ -36,8 +35,7 @@ public class Machine {
         return name;
     }
 
-    public void setName(String name) throws EmptyException {
-        validateForEmpty(name);
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -45,8 +43,7 @@ public class Machine {
         return location;
     }
 
-    public void setLocation(String location) throws EmptyException {
-        validateForEmpty(location);
+    public void setLocation(String location) {
         this.location = location;
     }
 
@@ -58,9 +55,4 @@ public class Machine {
         this.user = user;
     }
 
-    public void validateForEmpty(String name) throws EmptyException {
-        if (name.equals("")) {
-            throw new EmptyException("Name should not be Empty");
-        }
-    }
 }
