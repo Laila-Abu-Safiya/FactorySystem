@@ -54,5 +54,4 @@ public class Machine {
     public void setUser(int user) {
         this.user = user;
     }
-
 }
