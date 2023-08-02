@@ -1,51 +1,72 @@
 package com.example.spring_boot.controller;
+
 import com.example.spring_boot.Entity.Job;
+import com.example.spring_boot.exptions.ValidateForExistsUser;
 import com.example.spring_boot.service.JobService;
-import com.example.spring_boot.service.MachineService;
+import com.example.spring_boot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "user/job/task")
 public class JobController {
 
     private final JobService jobService;
-    private final MachineService machineService;
+    private final UserService userService;
+
     @Autowired
-    public JobController(JobService jobService, MachineService machineService) {
+    public JobController(JobService jobService, UserService userService) {
         this.jobService = jobService;
-        this.machineService = machineService;
+        this.userService = userService;
     }
 
+    @PostMapping(path = "user/{userId}/job/task")
+    public Job addNewMachine(@RequestBody Job job, @PathVariable("userId") int userId) throws Exception {
+        boolean exists = userService.checkIfUserExists(userId);
+        checkIfUserExists(exists);
+        return jobService.addNewJob(job);
 
-
-    @GetMapping
-    public List<Job> getAllJobs(){
-        return jobService.listAllJobs();
     }
 
-    @PostMapping
-    public void addNewJob(@RequestBody Job job){
-        boolean exists = machineService.checkMachineById(job.getMachineid());
-        if(exists) {
-            if(job.getProirty() >=1 && job.getProirty()<=5){
-                jobService.addNewJob(job);
-            }
-            else {
-                throw new IllegalStateException("Priority value should be [1,5]");
-            }
+    @DeleteMapping(path = "tenant/{userId}/job/task")
+    public void deleteTask(@RequestBody int taskId) throws Exception {
+        boolean exists = jobService.CheckIfTaskExists(taskId);
+
+        if (exists) {
+            jobService.deleteTask(taskId);
+        } else {
+            throw new Exception("Task is not exists");
         }
-        else {
-            throw new IllegalStateException("Machine with id "+ job.getMachineid() +" is not exists");
 
+    }
+
+    @GetMapping(path = "tenant/{userId}/job/task/{taskId}")
+    public Optional<Job> getTaskById(@PathVariable("taskId") int taskId) throws Exception {
+        boolean exists = jobService.CheckIfTaskExists(taskId);
+
+        if (exists) {
+            return jobService.getTaskById(taskId);
+        } else {
+            throw new Exception("Task is not exists");
         }
     }
 
-    @GetMapping("{id}")
-    public Optional<Job> getJob(@PathVariable int id) {
-        return jobService.getSpecificJob(id);}
+    @PostMapping(path = "tenant/{userId}/job/task/{taskId}")
+    public Job resubmitSpecificTask(@RequestBody Job job, @PathVariable("userId") int userId, @PathVariable("taskId") int taskId) throws Exception {
+        boolean exists = userService.checkIfUserExists(userId);
+        checkIfUserExists(exists);
+        Optional<Job> task = jobService.getTaskById(taskId);
+        if(task.get().getStatus().equals("pending")){
+            throw new Exception("this task is not in final state");
+        }
+        return jobService.addNewJob(job);
 
+    }
+
+    public void checkIfUserExists(boolean exists) throws ValidateForExistsUser {
+        if (!exists) {
+            throw new ValidateForExistsUser("User is not exist");
+        }
+    }
 }
