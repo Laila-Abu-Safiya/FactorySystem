@@ -1,12 +1,10 @@
 package com.example.spring_boot.service;
 
-
 import com.example.spring_boot.Entity.Job;
 import com.example.spring_boot.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,27 +13,23 @@ public class JobService {
     @Autowired
     private JobRepository jobRepository;
 
-    public List<Job> listAllJobs() {
-        return jobRepository.findAll();
+    public Job addNewJob(Job task) {
+        return jobRepository.save(task);
     }
 
-    public void addNewJob(Job job) {
-        jobRepository.save(job);
+    public void deleteTask(int taskId) {
+
+        jobRepository.deleteById(taskId);
     }
 
-    public void checkIfMachineUsed(int machineid) {
-        Optional<Job> existsJobs = jobRepository.findJobByMachineId(machineid);
-        if (existsJobs.isPresent()) {
-            checkDeleteRelatedJob(existsJobs.get().getTaskid());
-        }
+    public boolean CheckIfTaskExists(int taskId) {
+        boolean exists = jobRepository.existsById(taskId);
+        return exists;
     }
 
-    public void checkDeleteRelatedJob(int id) {
-        jobRepository.deleteById(id);
-    }
+    public Optional<Job> getTaskById(int taskId) {
+        return jobRepository.findById(taskId);
 
-    public Optional<Job> getSpecificJob(int id) {
-        return jobRepository.findById(id);
     }
 
 }
