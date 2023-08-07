@@ -11,6 +11,4 @@ import java.util.Optional;
 
 @Repository
 public interface JobRepository extends JpaRepository<Job, Integer> {
-    @Query("SELECT j FROM Job j where j.machineid = ?1")
-    Optional<Job> findJobByMachineId(int machineid);
 }

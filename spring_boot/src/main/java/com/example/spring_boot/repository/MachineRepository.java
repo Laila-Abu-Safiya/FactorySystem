@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MachineRepository extends JpaRepository<Machine, Integer> {
 
-    @Query("SELECT machine.id FROM Machine machine where machine.user = ?1")
+    @Query("SELECT machine.id FROM Machine machine where machine.users.id = ?1")
     int [] findMachinesByUserId(int userid);
 
-    @Query("SELECT machine FROM Machine machine where machine.user = ?1")
+    @Query("SELECT machine FROM Machine machine where machine.users.id = ?1")
     Machine [] findUserMachines(int userid);
 }

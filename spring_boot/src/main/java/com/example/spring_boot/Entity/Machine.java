@@ -1,14 +1,14 @@
 package com.example.spring_boot.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.lang.NonNull;
 
-@Entity
+import java.util.Set;
 
+@Entity
+@Table(name = "machine")
 public class Machine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,26 @@ public class Machine {
     private String name;
     @NotEmpty(message = "Location should not be Empty")
     private String location;
-    private int user;
+
+    @ManyToOne
+    @JoinColumn(name = "iduser", nullable = false)
+    private User users;
+
+   /* @OneToMany(mappedBy = "machines")
+    private Set<Job> tasks;*/
+   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   @JoinTable(
+           name = "machinetasks",
+           joinColumns = @JoinColumn(name = "machineid",referencedColumnName = "id"),
+           inverseJoinColumns = @JoinColumn(name = "taskid",referencedColumnName = "taskid"))
+   Set<Job> tasks;
+    public User getUsers() {
+        return users;
+    }
+
+    public void setUsers(User users) {
+        this.users = users;
+    }
 
     public Machine() {
         super();
@@ -45,14 +64,6 @@ public class Machine {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public int getUser() {
-        return user;
-    }
-
-    public void setUser(int user) {
-        this.user = user;
     }
 
 

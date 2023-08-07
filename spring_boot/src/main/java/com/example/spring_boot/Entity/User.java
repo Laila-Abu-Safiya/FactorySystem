@@ -1,11 +1,11 @@
 package com.example.spring_boot.Entity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 
+import java.util.Set;
+
 @Entity
+@Table(name = "user")
 public class User {
 
     @Id
@@ -13,6 +13,9 @@ public class User {
     private int id;
     @NonNull
     private String name;
+
+    @OneToMany(mappedBy = "users",fetch = FetchType.LAZY)
+    private Set<Machine> machineSet;
 
     public User() {
     }

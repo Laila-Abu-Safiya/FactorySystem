@@ -1,16 +1,47 @@
 package com.example.spring_boot.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.Date;
+import java.util.Set;
 
 @Entity
+@Table(name = "job")
 public class Job {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int taskid;
-    private int machineid;
+
+    @NotNull
     private int proirty;
+    @NotEmpty
     private String type;
+    @NotEmpty
     private String description;
+    private String status;
+
+    public Set<Machine> getMachines() {
+        return machines;
+    }
+
+    public void setMachines(Set<Machine> machines) {
+        this.machines = machines;
+    }
+
+    @ManyToMany(mappedBy = "tasks", fetch = FetchType.LAZY)
+    @JsonBackReference
+    Set<Machine> machines;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public int getTaskid() {
         return taskid;
@@ -18,14 +49,6 @@ public class Job {
 
     public void setTaskid(int taskid) {
         this.taskid = taskid;
-    }
-
-    public int getMachineid() {
-        return machineid;
-    }
-
-    public void setMachineid(int machineid) {
-        this.machineid = machineid;
     }
 
     public int getProirty() {

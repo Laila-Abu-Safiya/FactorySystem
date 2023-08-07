@@ -33,7 +33,6 @@ public class MachineController {
     public Machine addNewMachine(@RequestBody Machine machine, @PathVariable("userId") int userId) throws Exception {
         boolean exists = userService.checkIfUserExists(userId);
         checkIfUserExists(exists);
-        machine.setUser(userId);
         return machineService.addNewMachine(machine);
 
 
@@ -52,7 +51,7 @@ public class MachineController {
         boolean exists = machineService.checkMachineById(machinId);
         if (exists) {
             Optional<Machine> machine1 = machineService.getMachineById(machinId);
-            if (machine1.get().getUser() == userId) {//get hte machine by its machinId then compare
+            if (machine1.get().getUsers().getId() == userId) {//get hte machine by its machinId then compare
                 return machineService.updateMachine(machinId, machine.getName(), machine.getLocation());
             } else {
                 throw new Exception("User is not the Machine owner");
