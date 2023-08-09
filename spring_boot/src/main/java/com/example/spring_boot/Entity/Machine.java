@@ -3,8 +3,10 @@ package com.example.spring_boot.Entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import org.hibernate.action.internal.OrphanRemovalAction;
 import org.springframework.lang.NonNull;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,14 +24,15 @@ public class Machine {
     @JoinColumn(name = "iduser", nullable = false)
     private User users;
 
-   /* @OneToMany(mappedBy = "machines")
-    private Set<Job> tasks;*/
-   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   /*ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    @JoinTable(
            name = "machinetasks",
            joinColumns = @JoinColumn(name = "machineid",referencedColumnName = "id"),
            inverseJoinColumns = @JoinColumn(name = "taskid",referencedColumnName = "taskid"))
-   Set<Job> tasks;
+   Set<Job> tasks = new HashSet<>();*/
+   @OneToMany(mappedBy = "machines", cascade = CascadeType.ALL)
+   private Set<Job> jobSet;
+
     public User getUsers() {
         return users;
     }

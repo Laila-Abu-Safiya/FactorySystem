@@ -1,4 +1,5 @@
 package com.example.spring_boot.Entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 

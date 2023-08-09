@@ -1,6 +1,7 @@
 package com.example.spring_boot.repository;
 
 import com.example.spring_boot.Entity.Job;
+import com.example.spring_boot.Entity.Machine;
 import org.aspectj.apache.bcel.classfile.Module;
 import org.hibernate.type.descriptor.converter.spi.JpaAttributeConverter;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,6 @@ import java.util.Optional;
 
 @Repository
 public interface JobRepository extends JpaRepository<Job, Integer> {
+    @Query("SELECT job.taskid FROM Job job where job.machines.users.id = ?1")
+    int [] CheckJobOwner(int userId);
 }

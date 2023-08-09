@@ -6,7 +6,9 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import javax.crypto.Mac;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -23,18 +25,51 @@ public class Job {
     @NotEmpty
     private String description;
     private String status;
+    private Date createddate;
+    private int  lastexcutiontime;
+    private int numberoftrails;
+    private int nextexcutiontime;
 
-    public Set<Machine> getMachines() {
-        return machines;
-    }
-
-    public void setMachines(Set<Machine> machines) {
-        this.machines = machines;
-    }
-
-    @ManyToMany(mappedBy = "tasks", fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idmachine", nullable = false)
     @JsonBackReference
-    Set<Machine> machines;
+    private Machine machines;
+
+    public Date getCreateddate() {
+        return createddate;
+    }
+
+    public void setCreateddate(Date createddate) {
+        this.createddate = createddate;
+    }
+
+    public int getLastexcutiontime() {
+        return lastexcutiontime;
+    }
+
+    public void setLastexcutiontime(int lastexcutiontime) {
+        this.lastexcutiontime = lastexcutiontime;
+    }
+
+    public int getNumberoftrails() {
+        return numberoftrails;
+    }
+
+    public void setNumberoftrails(int numberoftrails) {
+        this.numberoftrails = numberoftrails;
+    }
+
+    public int getNextexcutiontime() {
+        return nextexcutiontime;
+    }
+
+    public void setNextexcutiontime(int nextexcutiontime) {
+        this.nextexcutiontime = nextexcutiontime;
+    }
+
+    /*@ManyToMany(mappedBy = "tasks", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    Set<Machine> machines = new HashSet<>();*/
     public String getStatus() {
         return status;
     }
@@ -75,6 +110,13 @@ public class Job {
         this.description = description;
     }
 
+    public Machine getMachines() {
+        return machines;
+    }
+
+    public void setMachines(Machine machines) {
+        this.machines = machines;
+    }
 
     public Job() {
         super();
