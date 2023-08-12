@@ -1,42 +1,53 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package com.example.spring_boot.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-
-import javax.crypto.Mac;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
-@Table(name = "job")
+@Table(
+    name = "job"
+)
 public class Job {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.IDENTITY
+    )
     private int taskid;
-
-    @NotNull
-    private int proirty;
-    @NotEmpty
-    private String type;
-    @NotEmpty
-    private String description;
+    private @NotNull int proirty;
+    private @NotEmpty String type;
+    private @NotEmpty String description;
     private String status;
     private Date createddate;
-    private int  lastexcutiontime;
-    private int numberoftrails;
+    private int lastexecutiontime;
+    private int numoftrails;
     private int nextexcutiontime;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idmachine", nullable = false)
+    @ManyToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "tasks",
+        cascade = {CascadeType.ALL}
+    )
     @JsonBackReference
-    private Machine machines;
+    List<Machine> machines = new ArrayList();
 
     public Date getCreateddate() {
-        return createddate;
+        return this.createddate;
     }
 
     public void setCreateddate(Date createddate) {
@@ -44,34 +55,39 @@ public class Job {
     }
 
     public int getLastexcutiontime() {
-        return lastexcutiontime;
+        return this.lastexecutiontime;
     }
 
     public void setLastexcutiontime(int lastexcutiontime) {
-        this.lastexcutiontime = lastexcutiontime;
+        this.lastexecutiontime = lastexcutiontime;
     }
 
     public int getNumberoftrails() {
-        return numberoftrails;
+        return this.numoftrails;
     }
 
     public void setNumberoftrails(int numberoftrails) {
-        this.numberoftrails = numberoftrails;
+        this.numoftrails = numberoftrails;
     }
 
     public int getNextexcutiontime() {
-        return nextexcutiontime;
+        return this.nextexcutiontime;
     }
 
     public void setNextexcutiontime(int nextexcutiontime) {
         this.nextexcutiontime = nextexcutiontime;
     }
 
-    /*@ManyToMany(mappedBy = "tasks", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonBackReference
-    Set<Machine> machines = new HashSet<>();*/
+    public List<Machine> getMachines() {
+        return this.machines;
+    }
+
+    public void setMachines(List<Machine> machines) {
+        this.machines = machines;
+    }
+
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(String status) {
@@ -79,7 +95,7 @@ public class Job {
     }
 
     public int getTaskid() {
-        return taskid;
+        return this.taskid;
     }
 
     public void setTaskid(int taskid) {
@@ -87,7 +103,7 @@ public class Job {
     }
 
     public int getProirty() {
-        return proirty;
+        return this.proirty;
     }
 
     public void setProirty(int proirty) {
@@ -95,7 +111,7 @@ public class Job {
     }
 
     public String getType() {
-        return type;
+        return this.type;
     }
 
     public void setType(String type) {
@@ -103,22 +119,13 @@ public class Job {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public Machine getMachines() {
-        return machines;
-    }
-
-    public void setMachines(Machine machines) {
-        this.machines = machines;
-    }
-
     public Job() {
-        super();
     }
 }
