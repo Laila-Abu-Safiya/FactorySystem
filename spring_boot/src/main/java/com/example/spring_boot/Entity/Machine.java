@@ -24,14 +24,14 @@ public class Machine {
     @JoinColumn(name = "iduser", nullable = false)
     private User users;
 
-   /*ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    @JoinTable(
            name = "machinetasks",
            joinColumns = @JoinColumn(name = "machineid",referencedColumnName = "id"),
            inverseJoinColumns = @JoinColumn(name = "taskid",referencedColumnName = "taskid"))
-   Set<Job> tasks = new HashSet<>();*/
-   @OneToMany(mappedBy = "machines", cascade = CascadeType.ALL)
-   private Set<Job> jobSet;
+   Set<Job> tasks = new HashSet<>();
+   /*@OneToMany(mappedBy = "machines", cascade = CascadeType.ALL)
+   private Set<Job> jobSet;*/
 
     public User getUsers() {
         return users;

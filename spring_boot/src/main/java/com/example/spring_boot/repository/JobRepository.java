@@ -12,6 +12,6 @@ import java.util.Optional;
 
 @Repository
 public interface JobRepository extends JpaRepository<Job, Integer> {
-    @Query("SELECT job.taskid FROM Job job where job.machines.users.id = ?1")
-    int [] CheckJobOwner(int userId);
+    @Query("SELECT job.machines FROM Job job where job.taskid = ?1")
+    Machine [] CheckJobOwner(int taskId);
 }

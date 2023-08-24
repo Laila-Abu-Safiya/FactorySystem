@@ -45,10 +45,18 @@ public class JobController {
     }
 
     @GetMapping(path = "tenant/{userId}/job/task/{taskId}")
-    public Optional<Job> getTaskById(@PathVariable("taskId") int taskId) throws Exception {
+    public Optional<Job> getTaskById(@PathVariable("taskId") int taskId, @PathVariable("userId") int userId) throws Exception {
         boolean exists = jobService.CheckIfTaskExists(taskId);
 
+
         if (exists) {
+            boolean userExists = userService.checkIfUserExists(userId);
+
+            boolean isUserOwner = jobService.checkIfUserIsOwner(userId, taskId);
+
+            checkIfUserExists(userExists);
+            checkIfTheUserOwner(isUserOwner);
+
             Optional<Job> task = jobService.getTaskById(taskId);
             return task;
         } else {

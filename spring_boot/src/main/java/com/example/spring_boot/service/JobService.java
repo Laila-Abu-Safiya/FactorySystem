@@ -4,18 +4,19 @@ import com.example.spring_boot.Entity.Job;
 import com.example.spring_boot.Entity.JobMachineRequest;
 import com.example.spring_boot.Entity.Machine;
 import com.example.spring_boot.repository.JobRepository;
+import com.example.spring_boot.repository.MachineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class JobService {
 
     @Autowired
     private JobRepository jobRepository;
+    @Autowired
+    private MachineRepository machineRepository;
 
     public Job addNewJob(Job task) {
         return jobRepository.save(task);
@@ -37,15 +38,12 @@ public class JobService {
     }
 
     public boolean checkIfUserIsOwner(int userId, int taskId) throws Exception {
-        int[] exists = jobRepository.CheckJobOwner(userId);
-        boolean flag = false;
-        for (int elem: exists){
-            if(elem == taskId)
-                flag = true;
-        }
-        if (exists.length != 0 && flag == true) {
+        Machine[] jobMachine = jobRepository.CheckJobOwner(taskId);
+        Machine[] userMachines = machineRepository.findUserMachines(userId);
+
+        if(jobMachine[0].getId() == userMachines[0].getId()){
             return true;
-        } else {
+        }else {
             return false;
         }
     }
