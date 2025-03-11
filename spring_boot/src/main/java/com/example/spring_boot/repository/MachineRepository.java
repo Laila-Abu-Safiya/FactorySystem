@@ -1,12 +1,9 @@
-package com.example.trainningspringproject.repository;
+package com.example.spring_boot.repository;
 
-import com.example.trainningspringproject.entity.Job;
-import com.example.trainningspringproject.entity.Machine;
+import com.example.spring_boot.Entity.Machine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public interface MachineRepository extends JpaRepository<Machine, Integer> {
